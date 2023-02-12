@@ -25,6 +25,27 @@ namespace YourAppName.Controllers
             return Ok(new { GameId = game.Id });
         }
 
+        [HttpGet]
+        public IActionResult GetAllGames()
+        {
+            // return a list of all games
+            var gameData = games.Select(game => new
+            {
+                Id = game.Id,
+                Name = game.Name,
+                TotalPlayers = game.TotalPlayers,
+                PlayersPlaying = game.PlayersPlaying,
+                Players = game.Players.Select(player => new
+                {
+                    Id = player.Id,
+                    Name = player.Name,
+                    Contact = player.Contact
+                })
+            }).ToList();
+
+            return Ok(gameData);
+        }
+        
         [HttpPost("{id}/players")]
         public IActionResult AddPlayerToGame(int id, [FromBody] PlayerRequest playerRequest)
         {
