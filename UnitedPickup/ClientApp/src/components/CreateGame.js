@@ -11,6 +11,8 @@ export class CreateGame extends Component {
         };
     }
 
+    
+    
     handleNameChange = (event) => {
         this.setState({ name: event.target.value });
     };

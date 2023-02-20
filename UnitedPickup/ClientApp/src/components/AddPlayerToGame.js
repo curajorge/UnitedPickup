@@ -1,7 +1,8 @@
-﻿import React from 'react';
+﻿
+import React from 'react';
 import axios from 'axios';
 
-class AddPlayerToGame extends React.Component {
+export class AddPlayerToGame extends React.Component {
     constructor(props) {
         super(props);
 
@@ -26,13 +27,16 @@ class AddPlayerToGame extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        axios.post(`https://localhost:7046/api/games/${this.props.gameId}/players`, {
+        const API_URL = process.env.REACT_APP_API_URL;
+
+        axios.post(`${API_URL}/api/games/${this.props.gameId}/players`, {
             name: this.state.name,
             contact: this.state.contact
         })
             .then(response => {
                 console.log(`Player ${response.data.playerId} added to game ${this.props.gameId}.`);
                 this.setState({ name: '', contact: '' });
+                this.props.onPlayerAdded();
             })
             .catch(error => {
                 console.log(error);
@@ -58,4 +62,3 @@ class AddPlayerToGame extends React.Component {
     }
 }
 
-export default AddPlayerToGame;

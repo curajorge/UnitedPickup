@@ -46,6 +46,34 @@ namespace YourAppName.Controllers
             return Ok(gameData);
         }
         
+        [HttpGet("{id}")]
+        public IActionResult GetGame(int id)
+        {
+            // find the game with the given ID
+            var game = games.Find(g => g.Id == id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            // return the game data
+            var gameData = new
+            {
+                Id = game.Id,
+                Name = game.Name,
+                TotalPlayers = game.TotalPlayers,
+                PlayersPlaying = game.PlayersPlaying,
+                Players = game.Players.Select(player => new
+                {
+                    Id = player.Id,
+                    Name = player.Name,
+                    Contact = player.Contact
+                })
+            };
+
+            return Ok(gameData);
+        }
+        
         [HttpPost("{id}/players")]
         public IActionResult AddPlayerToGame(int id, [FromBody] PlayerRequest playerRequest)
         {
