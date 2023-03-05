@@ -46,6 +46,31 @@ namespace YourAppName.Controllers
             return Ok(gameData);
         }
         
+        [HttpGet("{id}")]
+        public IActionResult GetGame(int id)
+        {
+            var game = games.Find(g => g.Id == id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new
+            {
+                game.Id,
+                game.Name,
+                game.TotalPlayers,
+                game.PlayersPlaying,
+                Players = game.Players.Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Contact
+                })
+            });
+        }
+        
+        
         [HttpPost("{id}/players")]
         public IActionResult AddPlayerToGame(int id, [FromBody] PlayerRequest playerRequest)
         {
@@ -74,6 +99,21 @@ namespace YourAppName.Controllers
                 return BadRequest("The game is already full.");
             }
         }
+        
+        [HttpGet("{id}/players")]
+        public IActionResult GetAllPlayersInGame(int id)
+        {
+            var game = games.FirstOrDefault(g => g.Id == id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            var players = game.Players;
+            return Ok(players);
+        }
+        
+        
     }
 }
 

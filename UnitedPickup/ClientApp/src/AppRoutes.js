@@ -3,7 +3,7 @@ import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import { CreateGame } from "./components/CreateGame";
 import {AllGames} from "./components/AllGames";
-import {GamePage} from "./components/GamePage";
+import GamePage from "./components/GamePage";
 
 const AppRoutes = [
   {

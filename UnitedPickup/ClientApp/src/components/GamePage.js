@@ -1,55 +1,41 @@
-﻿import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import GameDetails from './GameDetails';
 import AddPlayerToGame from './AddPlayerToGame';
-import { useParams } from 'react-router-dom';
 
-const { gameId } = useParams();
+function GamePage() {
+    const [game, setGame] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { gameId } = useParams();
 
-
-export class GamePage extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            game: null,
-            loading: true,
-            error: null
-        };
-    }
-
-    componentDidMount() {
-        // const gameId = this.props.match.params.gameId;
-
-        
-        alert(gameId);
-        
-        axios.get(`/api/games/${gameId}`)
+    useEffect(() => {
+        axios.get(`https://localhost:7046/api/games/${gameId}`)
             .then(response => {
-                this.setState({ game: response.data, loading: false });
+                setGame(response.data);
+                setLoading(false);
             })
             .catch(error => {
-                this.setState({ error: error, loading: false });
+                setError(error);
+                setLoading(false);
             });
+    }, [gameId]);
+
+    if (loading) {
+        return <div>Loading game details...</div>;
     }
 
-    render() {
-        const { game, loading, error } = this.state;
-
-        if (loading) {
-            return <div>Loading game details...</div>;
-        }
-
-        if (error) {
-            return <div>Error: {error.message}</div>;
-        }
-
-        return (
-            <div>
-                <GameDetails game={game} />
-                <AddPlayerToGame gameId={game.id} />
-            </div>
-        );
+    if (error) {
+        return <div>Error: {error.message}</div>;
     }
+
+    return (
+        <div>            
+            <GameDetails game={game} />
+            <AddPlayerToGame gameId={game.id} />
+        </div>
+    );
 }
 
+export default GamePage;
