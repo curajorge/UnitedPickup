@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'UnitedPickup'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_34BB2B36C5B44D84A84F49CA53AFB0AD }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_87DF590FF2F141AD8EB38F1EE25C2550 }}
           package: .
